@@ -45,7 +45,7 @@
             android:textColor="#2F2F2F" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/submit_email"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -61,6 +61,7 @@
         android:layout_marginTop="60dp"
         android:text="@string/email_error"
         android:textColor="#F44336"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />

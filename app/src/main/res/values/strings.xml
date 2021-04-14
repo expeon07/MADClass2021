@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">MADClass2021.</string>
+    <string name="app_name">MADClass2021</string>
 
     <string name="login_inst">Please provide your email address to the MAD Server.</string>
     <string name="email_hint">E-mail Address</string>
     <string name="submit_email">Submit email</string>
-    <string name="email_error">Cannot identify e-mail</string>
+    <string name="email_error">Cannot identify e-mail %1$s </string>
 
     <string name="menu1">Menu Option 1</string>
     <string name="menu2">Menu Option 2</string>
