@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/marble_background"
+    android:backgroundTint="#80FFFFFF"
+    android:backgroundTintMode="src_over">
+
+
+    <TextView
+        android:id="@+id/menu_greeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/menu1"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="200dp"
+        android:backgroundTint="#BCBF50"
+        android:text="@string/menu1"
+        android:textColor="#2F2F2F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/menu2"
+        android:layout_width="250"
+        android:layout_height="50"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#D9B64E"
+        android:text="@string/menu2"
+        android:textColor="#2F2F2F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu1" />
+
+    <Button
+        android:id="@+id/menu3"
+        android:layout_width="250"
+        android:layout_height="50"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#D9C589"
+        android:text="@string/menu3"
+        android:textColor="#2F2F2F"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
