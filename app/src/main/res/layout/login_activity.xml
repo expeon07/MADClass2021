@@ -24,6 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
@@ -33,13 +34,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress2"
+            android:id="@+id/email_address"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/email_hint"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textAlignment="center"
+            android:textColor="#2F2F2F" />
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -50,5 +53,16 @@
             android:scaleType="fitXY"
             android:src="@drawable/send" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/email_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="@string/email_error"
+        android:textColor="#F44336"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

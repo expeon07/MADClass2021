@@ -3,6 +3,7 @@ package android.ihu.madclass2021;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -10,10 +11,13 @@ public class MainActivity extends AppCompatActivity {
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=XYZ";
     static final String EMAIL_VERIFICATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
 
+    AuthenticationTask authenticationTask = new AuthenticationTask();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Test", "onCreate successful.");
     }
 
     @Override
@@ -21,13 +25,17 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // contact and download the contents of the Web page located
         // at http://mad.mywork.gr/authenticate.php?t=XYZ
+        String response = "";
+        authenticationTask.execute(TOKEN_VERIFICATION_URL, response); // .get();
 
+        Log.i("Response", response);
         String status = "";
         String message = "";
 
         verifyToken(status, message);
 
     }
+
 
     private void verifyToken(String status, String message) {
         if (status.equals("0-OK")) {

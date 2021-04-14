@@ -32,8 +32,8 @@
 
     <Button
         android:id="@+id/menu2"
-        android:layout_width="250"
-        android:layout_height="50"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:backgroundTint="#D9B64E"
         android:text="@string/menu2"
@@ -44,8 +44,8 @@
 
     <Button
         android:id="@+id/menu3"
-        android:layout_width="250"
-        android:layout_height="50"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:backgroundTint="#D9C589"
         android:text="@string/menu3"
