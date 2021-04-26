@@ -10,14 +10,31 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    String token = "";
+    // String token = "";
+    String token = "XYZ";
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=";
     static final String EMAIL_VERIFICATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
-
-    AuthenticationTask authenticationTask = new AuthenticationTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +46,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // TODO contact and download the contents of the Web page located
-        // at http://mad.mywork.gr/authenticate.php?t=XYZ
-        String response = "";
-        authenticationTask.execute(TOKEN_VERIFICATION_URL + token, response); // .get();
+        // contact and download the contents of the Web page located
+        String token_authentication_url = TOKEN_VERIFICATION_URL + token;
+        AuthenticationTask authenticationTask = new AuthenticationTask();
 
-        Log.i("Response", response);
-        String status = "0-FAIL"; //"";
-        String message = "hiyaaaa"; //"";
+        Map<String, String> response = new HashMap<>();
 
-        verifyToken(status, message);
+        try {
+            authenticationTask.execute(token_authentication_url);
+            Log.d("TAG","Response: " + response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String status = response.get("status");
+        String message = response.get("msg");
+        Log.d("TAG","Status: " + status);
+        Log.d("TAG","Message: " + message);
+        // verifyToken(status, message);
 
     }
 
