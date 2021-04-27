@@ -68,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void getResponse(String result) {
+
+        Log.d("TAG","Response: " + result);
+
+        Map<String, String> response = new HashMap<>();
+
+    }
+
 
     private void verifyToken(String status, String message) {
         if (status.equals("0-OK")) {
