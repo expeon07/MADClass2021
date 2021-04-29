@@ -9,7 +9,7 @@
     android:backgroundTintMode="src_over">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/email_textView"
         android:layout_width="342dp"
         android:layout_height="0dp"
         android:layout_marginTop="150dp"
@@ -65,5 +65,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/token_gen_email"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/token_gen_email"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_error" />
+
+    <TextView
+        android:id="@+id/token_gen_token"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="104dp"
+        android:text="@string/token_gen_token"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

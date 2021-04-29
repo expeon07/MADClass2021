@@ -9,4 +9,7 @@
     <string name="menu1">Menu Option 1</string>
     <string name="menu2">Menu Option 2</string>
     <string name="menu3">Menu Option 3</string>
+
+    <string name="token_gen_email">User identified: %1$s</string>
+    <string name="token_gen_token">Please use token: %1$s</string>
 </resources>

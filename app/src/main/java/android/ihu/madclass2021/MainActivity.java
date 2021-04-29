@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -25,11 +26,13 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    // String token = "";
-    String token = "";
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=";
     static final String TOKEN_GENERATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
+
+    String token = "";
+//    String token = "XYZ";
     String user_email = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,31 +54,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    private void generateToken() {
-        setContentView(R.layout.login_activity);
-
-        ImageButton submit_email = findViewById(R.id.submit_email);
-        submit_email.setOnClickListener(v -> {
-            EditText email =  findViewById(R.id.email_address);
-            user_email = email.getText().toString();
-
-            // contact email verification Web page,
-            String token_generation_url = TOKEN_GENERATION_URL + user_email;
-            AuthenticationTask authenticationTask = new AuthenticationTask();
-            try {
-                authenticationTask.execute(token_generation_url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // located at http://mad.mywork.gr/generate_token.php?e=your_email
-            //String status = "1-OK"; //"";
-
-        });
-
     }
 
 
@@ -141,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("onPostExecute", "Response status: " + status);
             Log.d("onPostExecute", "Response message: " + msg);
 
-            status = "0-OK";
+            // TODO erase this test
+            status = "1-OK";
 
             switch (status) {
                 case "0-OK":
@@ -156,9 +135,34 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case "1-OK":
-                    // TODO token generated successfully
+                    // make everything invisible
+                    TextView email_textView = findViewById(R.id.email_textView);
+                    email_textView.setVisibility(View.INVISIBLE);
+
+                    EditText email_editText = findViewById(R.id.email_address);
+                    email_editText.setVisibility(View.INVISIBLE);
+
+                    ImageButton submit_email = findViewById(R.id.submit_email);
+                    submit_email.setVisibility(View.INVISIBLE);
+
+                    // display token generation successful message
+                    String success_email = getResources().getString(R.string.token_gen_email, user_email);
+
+                    TextView token_gen_email = findViewById(R.id.token_gen_email);
+                    token_gen_email.setText(success_email);
+                    token_gen_email.setVisibility(View.VISIBLE);
+
+                    String success_token = getResources().getString(R.string.token_gen_token, token);
+                    TextView token_gen_token = findViewById(R.id.token_gen_token);
+                    token_gen_token.setText(success_token);
+                    token_gen_token.setVisibility(View.VISIBLE);
+
                     // TODO Rerun the application and set new token
-                    setContentView(R.layout.menu_activity);
+                    //setContentView(R.layout.menu_activity);
+
+                    Toast.makeText(getApplicationContext(),
+                            "Authentication successful",
+                            Toast.LENGTH_SHORT).show();
                     break;
 
                 case "1-FAIL":
@@ -171,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
 
                     // Toast: Authentication Failed
                     Toast.makeText(getApplicationContext(),
-                            "Authentication Failed",
+                            "Authentication failed",
                             Toast.LENGTH_SHORT).show();
                     break;
-
             }
+
         }
     }
 
@@ -207,4 +211,25 @@ public class MainActivity extends AppCompatActivity {
 
         return response;
     }
+
+
+    private void generateToken() {
+        setContentView(R.layout.login_activity);
+
+        ImageButton submit_email = findViewById(R.id.submit_email);
+        submit_email.setOnClickListener(v -> {
+            EditText email =  findViewById(R.id.email_address);
+            user_email = email.getText().toString();
+
+            // contact email verification Web page
+            String token_generation_url = TOKEN_GENERATION_URL + user_email;
+            AuthenticationTask authenticationTask = new AuthenticationTask();
+            try {
+                authenticationTask.execute(token_generation_url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 }
