@@ -3,21 +3,21 @@ package android.ihu.madclass2021;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
 
 public class AuthenticationTask extends AsyncTask<String, Void, InputStream> {
 
     @Override
     protected InputStream doInBackground(String... urls) {
-        // String response = "";
         InputStream inputStream = null;
 
         try {
@@ -30,7 +30,6 @@ public class AuthenticationTask extends AsyncTask<String, Void, InputStream> {
                 urlConnection.connect();
 
                 try {
-                    // InputStream inputStream;
                     int status = urlConnection.getResponseCode();
 
                     if (status != HttpURLConnection.HTTP_OK) {
@@ -39,17 +38,13 @@ public class AuthenticationTask extends AsyncTask<String, Void, InputStream> {
                         inputStream = urlConnection.getInputStream();
                     }
 
-                    // response = readStream(inputStream);
-
                 } finally {
                     urlConnection.disconnect();
                 }
             } catch (IOException ioex) {
-                // response = ioex.toString();
                 Log.e("PlaceholderFragment", "Error", ioex);
             }
         } catch (MalformedURLException muex) {
-            // response = muex.toString();
             Log.e("PlaceholderFragment", "Error", muex);
         }
         return inputStream;
@@ -59,37 +54,53 @@ public class AuthenticationTask extends AsyncTask<String, Void, InputStream> {
     protected void onPostExecute(InputStream result) {
         Log.d("onPostExecute","Result: " + result);
 
-        String str_response = readStream(result);
-        Log.d("onPostExecute","String Result: " + str_response);
+        HashMap<String, String> response = new HashMap<>();
 
-        // mainActivity.getResponse(result);
-        List<XMLParser.Response> responses;
-
-        XMLParser xmlParser = new XMLParser();
-
+        XmlPullParserFactory pullParserFactory;
         try {
-            responses = xmlParser.parse(result);
-            System.out.println(responses);
-            Log.d("onPostExecute","Response: " + responses);
+            pullParserFactory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = pullParserFactory.newPullParser();
 
-        } catch (IOException | XmlPullParserException e) {
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(result, null);
+
+            response = parseXML(parser);
+
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 
+        Log.d("onPostExecute", "Response status: " + response.get("status"));
+        Log.d("onPostExecute", "Response message: " + response.get("msg"));
 
     }
 
-    private String readStream(InputStream is) {
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            int i = is.read();
-            while(i != -1) {
-                bo.write(i);
-                i = is.read();
+    private HashMap<String, String> parseXML(XmlPullParser parser) throws XmlPullParserException,IOException
+    {
+        HashMap<String, String> response = new HashMap<>();
+        int eventType = parser.getEventType();
+
+        while (eventType != XmlPullParser.END_DOCUMENT){
+            String name;
+            switch (eventType){
+                case XmlPullParser.START_DOCUMENT:
+                    response = new HashMap<>();
+                    break;
+                case XmlPullParser.START_TAG:
+                    name = parser.getName();
+                    if (name.equals("status")){
+                        response.put("status", parser.nextText());
+                    } else if (name.equals("msg")){
+                        response.put("msg", parser.nextText());
+                    }
+                    break;
+                case XmlPullParser.END_TAG:
+                    break;
             }
-            return bo.toString();
-        } catch (IOException e) {
-            return "";
+            eventType = parser.next();
         }
+
+        return response;
     }
 }
+
