@@ -11,9 +11,9 @@
 
     <TextView
         android:id="@+id/menu_greeting"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
         android:id="@+id/menu1"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="150dp"
         android:backgroundTint="#BCBF50"
         android:text="@string/menu1"
         android:textColor="#2F2F2F"

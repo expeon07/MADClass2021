@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=";
     static final String TOKEN_GENERATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
 
-    String token = "";
-//    String token = "XYZ";
+//    String token = "";
+    String token = "XYZ";
     String user_email = "";
 
 
@@ -119,15 +118,16 @@ public class MainActivity extends AppCompatActivity {
             Log.d("onPostExecute", "Response status: " + status);
             Log.d("onPostExecute", "Response message: " + msg);
 
-            // TODO erase this test
-            status = "1-OK";
-
             switch (status) {
                 case "0-OK":
                     setContentView(R.layout.menu_activity);
 
                     TextView menu_greeting = findViewById(R.id.menu_greeting);
                     menu_greeting.setText(msg);
+
+                    Toast.makeText(getApplicationContext(),
+                            "Authentication successful",
+                            Toast.LENGTH_LONG).show();
                     break;
 
                 case "0-FAIL":
@@ -145,17 +145,16 @@ public class MainActivity extends AppCompatActivity {
                     ImageButton submit_email = findViewById(R.id.submit_email);
                     submit_email.setVisibility(View.INVISIBLE);
 
+                    TextView error = findViewById(R.id.email_error);
+                    error.setVisibility(View.INVISIBLE);
+
                     // display token generation successful message
-                    String success_email = getResources().getString(R.string.token_gen_email, user_email);
+                    TextView token_gen_msg = findViewById(R.id.token_gen_msg);
+                    token_gen_msg.setText(msg);
 
-                    TextView token_gen_email = findViewById(R.id.token_gen_email);
-                    token_gen_email.setText(success_email);
-                    token_gen_email.setVisibility(View.VISIBLE);
-
-                    String success_token = getResources().getString(R.string.token_gen_token, token);
-                    TextView token_gen_token = findViewById(R.id.token_gen_token);
-                    token_gen_token.setText(success_token);
-                    token_gen_token.setVisibility(View.VISIBLE);
+                    String[] token_result = msg.split(" ");
+                    token = token_result[token_result.length - 1];
+                    Log.d("onPostExecute", "Generated token: " + token);
 
                     // TODO Rerun the application and set new token
                     //setContentView(R.layout.menu_activity);
