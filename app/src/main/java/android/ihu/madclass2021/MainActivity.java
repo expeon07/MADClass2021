@@ -2,6 +2,10 @@ package android.ihu.madclass2021;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,10 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=";
     static final String TOKEN_GENERATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
-
-//    String token = "";
-    String token = "XYZ";
-    String user_email = "";
+    private String token = "XYZ";
+    private String user_email = "";
 
 
     @Override
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("onStart", "Token: " + token);
 
         // contact and download the contents of the Web page located
         String token_authentication_url = TOKEN_VERIFICATION_URL + token;
@@ -152,16 +155,25 @@ public class MainActivity extends AppCompatActivity {
                     TextView token_gen_msg = findViewById(R.id.token_gen_msg);
                     token_gen_msg.setText(msg);
 
+                    Toast.makeText(getApplicationContext(),
+                            "Authentication successful",
+                            Toast.LENGTH_SHORT).show();
+
                     String[] token_result = msg.split(" ");
                     token = token_result[token_result.length - 1];
                     Log.d("onPostExecute", "Generated token: " + token);
 
-                    // TODO Rerun the application and set new token
-                    //setContentView(R.layout.menu_activity);
+                    // TODO Rerun the application and with the new token
+                    Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                            getBaseContext().getPackageName() );
+                    intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                    startActivity(intent);
 
-                    Toast.makeText(getApplicationContext(),
-                            "Authentication successful",
-                            Toast.LENGTH_SHORT).show();
+                    Log.d("onPostExecute", "App restarted.");
+                    Log.d("onPostExecute", "Token after restart: " + token);
+
+                    // setContentView(R.layout.menu_activity);
+
                     break;
 
                 case "1-FAIL":
