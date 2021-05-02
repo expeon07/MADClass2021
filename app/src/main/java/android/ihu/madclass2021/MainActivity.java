@@ -30,10 +30,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     static final String TOKEN_VERIFICATION_URL = "http://mad.mywork.gr/authenticate.php?t=";
-    static final String TOKEN_GENERATION_URL = "http://mad.mywork.gr/generate_token.php?e=";
-    private String token = "XYZ";
-    private String user_email = "";
-
+    public static String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (token.equals("")) {
+            token = "XYZ";
+        }
+
         Log.d("onStart", "Token: " + token);
 
         // contact and download the contents of the Web page located
@@ -109,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
                 parser.setInput(result, null);
 
-                response = parseXML(parser);
+                XMLParser xmlParser = new XMLParser();
+                response = xmlParser.parseXML(parser);
 
             } catch (XmlPullParserException | IOException e) {
                 e.printStackTrace();
@@ -134,114 +137,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case "0-FAIL":
-                    generateToken();
-                    break;
-
-                case "1-OK":
-                    // make everything invisible
-                    TextView email_textView = findViewById(R.id.email_textView);
-                    email_textView.setVisibility(View.INVISIBLE);
-
-                    EditText email_editText = findViewById(R.id.email_address);
-                    email_editText.setVisibility(View.INVISIBLE);
-
-                    ImageButton submit_email = findViewById(R.id.submit_email);
-                    submit_email.setVisibility(View.INVISIBLE);
-
-                    TextView error = findViewById(R.id.email_error);
-                    error.setVisibility(View.INVISIBLE);
-
-                    // display token generation successful message
-                    TextView token_gen_msg = findViewById(R.id.token_gen_msg);
-                    token_gen_msg.setText(msg);
-
-                    Toast.makeText(getApplicationContext(),
-                            "Authentication successful",
-                            Toast.LENGTH_SHORT).show();
-
-                    assert msg != null;
-                    String[] token_result = msg.split(" ");
-                    token = token_result[token_result.length - 1];
-                    Log.d("onPostExecute", "Generated token: " + token);
-
-                    // TODO Rerun the application and with the new token
-                    Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(
-                            getBaseContext().getPackageName() );
-                    intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                    startActivity(intent);
-
-                    Log.d("onPostExecute", "App restarted.");
-                    Log.d("onPostExecute", "Token after restart: " + token);
-
-                    // setContentView(R.layout.menu_activity);
-
-                    break;
-
-                case "1-FAIL":
-                    // print error message(make visible):
-                    String error_msg = getResources().getString(R.string.email_error, user_email);
-
-                    TextView login_error = findViewById(R.id.email_error);
-                    login_error.setText(error_msg);
-                    login_error.setVisibility(View.VISIBLE);
-
-                    // Toast: Authentication Failed
-                    Toast.makeText(getApplicationContext(),
-                            "Authentication failed",
-                            Toast.LENGTH_SHORT).show();
+                    Intent login_intent = new Intent(MainActivity.this,
+                            LoginActivity.class);
+                    startActivity(login_intent);
                     break;
             }
-
         }
-    }
-
-
-    private HashMap<String, String> parseXML(XmlPullParser parser) throws XmlPullParserException,IOException
-    {
-        HashMap<String, String> response = new HashMap<>();
-        int eventType = parser.getEventType();
-
-        while (eventType != XmlPullParser.END_DOCUMENT){
-            String name;
-            switch (eventType){
-                case XmlPullParser.START_DOCUMENT:
-                    response = new HashMap<>();
-                    break;
-                case XmlPullParser.START_TAG:
-                    name = parser.getName();
-                    if (name.equals("status")){
-                        response.put("status", parser.nextText());
-                    } else if (name.equals("msg")){
-                        response.put("msg", parser.nextText());
-                    }
-                    break;
-                case XmlPullParser.END_TAG:
-                    break;
-            }
-            eventType = parser.next();
-        }
-
-        return response;
-    }
-
-
-    private void generateToken() {
-        setContentView(R.layout.activity_login);
-
-        ImageButton submit_email = findViewById(R.id.submit_email);
-        submit_email.setOnClickListener(v -> {
-            EditText email =  findViewById(R.id.email_address);
-            user_email = email.getText().toString();
-
-            // contact email verification Web page
-            String token_generation_url = TOKEN_GENERATION_URL + user_email;
-            AuthenticationTask authenticationTask = new AuthenticationTask();
-            try {
-                authenticationTask.execute(token_generation_url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
 }
