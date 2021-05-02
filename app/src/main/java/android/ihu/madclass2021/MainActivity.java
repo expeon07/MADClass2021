@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch (status) {
                 case "0-OK":
-                    setContentView(R.layout.menu_activity);
+                    setContentView(R.layout.activity_menu);
 
                     TextView menu_greeting = findViewById(R.id.menu_greeting);
                     menu_greeting.setText(msg);
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                             "Authentication successful",
                             Toast.LENGTH_SHORT).show();
 
+                    assert msg != null;
                     String[] token_result = msg.split(" ");
                     token = token_result[token_result.length - 1];
                     Log.d("onPostExecute", "Generated token: " + token);
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void generateToken() {
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
 
         ImageButton submit_email = findViewById(R.id.submit_email);
         submit_email.setOnClickListener(v -> {
