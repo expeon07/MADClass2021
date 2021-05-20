@@ -94,7 +94,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:padding="10dp"
-            android:text="@string/requesting" />
+            android:text="" />
 
         <LinearLayout
             android:layout_width="match_parent"
