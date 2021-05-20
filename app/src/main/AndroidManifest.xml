@@ -12,8 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MADClass2021"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JukeboxActivity"></activity>
         <activity android:name=".LoginActivity" />
+        <activity android:name=".JukeboxActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

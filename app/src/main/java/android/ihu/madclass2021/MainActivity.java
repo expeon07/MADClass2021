@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class AuthenticationTask extends AsyncTask<String, Void, InputStream> {
-
         @Override
         protected InputStream doInBackground(String... urls) {
+
             InputStream inputStream = null;
 
             try {
@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (MalformedURLException muex) {
                 Log.e("PlaceholderFragment", "Error", muex);
             }
+
+            Log.d("onPostExecute","inputStream: " + inputStream);
+
             return inputStream;
         }
 
@@ -105,10 +108,14 @@ public class MainActivity extends AppCompatActivity {
 
             XmlPullParserFactory pullParserFactory;
             try {
+                Log.d("AuthenticationTask", "onPostExecute, Where is the error.");
+
                 pullParserFactory = XmlPullParserFactory.newInstance();
                 XmlPullParser parser = pullParserFactory.newPullParser();
 
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+
+                Log.d("AuthenticationTask", "onPostExecute result: " + result);
                 parser.setInput(result, null);
 
                 XMLParser xmlParser = new XMLParser();
