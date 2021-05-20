@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
             XmlPullParserFactory pullParserFactory;
             try {
-                Log.d("AuthenticationTask", "onPostExecute, Where is the error.");
-
                 pullParserFactory = XmlPullParserFactory.newInstance();
                 XmlPullParser parser = pullParserFactory.newPullParser();
 
@@ -133,8 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
             switch (status) {
                 case "0-OK":
-                    setContentView(R.layout.activity_menu);
+                    Intent menu_intent = new Intent(MainActivity.this,
+                            MenuActivity.class);
+                    startActivity(menu_intent);
 
+//                  TODO carry over msg to Menu
                     TextView menu_greeting = findViewById(R.id.menu_greeting);
                     menu_greeting.setText(msg);
 
