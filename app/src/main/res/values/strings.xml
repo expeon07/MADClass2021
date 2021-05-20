@@ -6,7 +6,15 @@
     <string name="submit_email">Submit email</string>
     <string name="email_error">Cannot identify e-mail %1$s </string>
 
-    <string name="menu1">Menu Option 1</string>
-    <string name="menu2">Menu Option 2</string>
-    <string name="menu3">Menu Option 3</string>
+    <string name="jukebox_menu">Jukebox</string>
+    <string name="artist">Artist</string>
+    <string name="title">Title</string>
+    <string name="no_song">No Song</string>
+    <string name="URL">URL</string>
+    <string name="requesting">Requesting song from CTower…</string>
+    <string name="stopped">Stopped</string>
+    <string name="play_song">Play song</string>
+    <string name="pause_song">Pause song</string>
+    <string name="stream_song">Stream song</string>
+
 </resources>

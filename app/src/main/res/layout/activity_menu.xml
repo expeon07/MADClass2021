@@ -22,37 +22,14 @@
         android:id="@+id/menu1"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="328dp"
         android:backgroundTint="#BCBF50"
-        android:text="@string/menu1"
+        android:text="@string/jukebox_menu"
         android:textColor="#2F2F2F"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/menu2"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:backgroundTint="#D9B64E"
-        android:text="@string/menu2"
-        android:textColor="#2F2F2F"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu1" />
-
-    <Button
-        android:id="@+id/menu3"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:backgroundTint="#D9C589"
-        android:text="@string/menu3"
-        android:textColor="#2F2F2F"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
