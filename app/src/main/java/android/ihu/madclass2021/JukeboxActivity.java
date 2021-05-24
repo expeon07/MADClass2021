@@ -33,7 +33,6 @@ public class JukeboxActivity extends AppCompatActivity {
     static final String JUKEBOX_URL= "http://mad.mywork.gr/get_song.php?t=";
     String token = MainActivity.token;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +42,12 @@ public class JukeboxActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        // disable play and pause buttons
+        ImageButton play_button = findViewById(R.id.btn_play);
+        ImageButton pause_button = findViewById(R.id.btn_pause);
+        play_button.setEnabled(false);
+        pause_button.setEnabled(false);
 
         // execute asynctask on request button click
         ImageButton request_button = findViewById(R.id.btn_request);
@@ -107,10 +112,10 @@ public class JukeboxActivity extends AppCompatActivity {
             tv_status.setText("Requesting song from CTower");
 
             // disable all buttons
-            ImageButton play_button = findViewById(R.id.btn_play);
-            ImageButton pause_button = findViewById(R.id.btn_pause);
-            play_button.setEnabled(false);
-            pause_button.setEnabled(false);
+            ImageButton request_button = findViewById(R.id.btn_request);
+            request_button.setEnabled(false);
+            Log.d("Jukebox onPostExecute", "all buttons disabled");
+
 
             HashMap<String, String> response = new HashMap<>();
 
@@ -120,6 +125,7 @@ public class JukeboxActivity extends AppCompatActivity {
                 XmlPullParser parser = pullParserFactory.newPullParser();
 
                 parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                Log.d("JukeboxTask","onPostExecute result: " + result);
                 parser.setInput(result, null);
 
                 XMLParser xmlParser = new XMLParser();
@@ -130,9 +136,8 @@ public class JukeboxActivity extends AppCompatActivity {
             }
 
             String status = response.get("status");
-            String msg = response.get("msg");
 
-            Log.d("Jukebox onPostExecute", "status" + status);
+            Log.d("Jukebox onPostExecute", "status: " + status);
 
             switch (status) {
                 case "0-FAIL":
@@ -140,49 +145,27 @@ public class JukeboxActivity extends AppCompatActivity {
                     break;
 
                 case "2-OK":
+                    String song_title = response.get("title");
+                    String song_artist = response.get("artist");
+                    String song_url = response.get("url");
+
+
                     // call SongPlayer
                     try {
-                        SongPlayer(msg);
+                        SongPlayer(song_title, song_artist, song_url);
                     } catch (IOException | XmlPullParserException e) {
                         e.printStackTrace();
                     }
             }
+
+
         }
     }
 
 
-    public void SongPlayer(String song_details) throws IOException, XmlPullParserException {
+    public void SongPlayer(String title, String artist, String url) throws IOException, XmlPullParserException {
 
-        Log.d("SongPlayer", "Song Details: " + song_details);
-        XmlPullParserFactory pullParserFactory;
-        pullParserFactory = XmlPullParserFactory.newInstance();
-        XmlPullParser songParser = pullParserFactory.newPullParser();
-
-        songParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-
-        // convert String msg to InputStream
-
-        //use ByteArrayInputStream to get the bytes of the String and convert them to InputStream.
-        InputStream msg_inputStream = new ByteArrayInputStream(song_details.getBytes(StandardCharsets.UTF_8));
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(msg_inputStream));
-//                        String msg_inputstream = bufferedReader.readLine();
-
-//                        while (msg_inputstream != null) {
-//                            System.out.println(msg_inputstream);
-//                            msg_inputstream = bufferedReader.readLine();
-//                        }
-
-        songParser.setInput(msg_inputStream, null);
-
-        SongXMLParser songXmlParser = new SongXMLParser();
-        HashMap<String, String> parsed_song_details = songXmlParser.parseXML(songParser);
-
-        String title = parsed_song_details.get("title");
-        String artist = parsed_song_details.get("artist");
-        String song_url_string = parsed_song_details.get("url");
-        Log.d("SongPlayer", "Song URL: " + song_url_string);
-
-        Uri myUri = Uri.parse(song_url_string);
+        Uri myUri = Uri.parse(url);
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioAttributes(
                 new AudioAttributes.Builder()
@@ -192,17 +175,24 @@ public class JukeboxActivity extends AppCompatActivity {
         );
 
         // TODO enable btn_pause
+        ImageButton pause_button = findViewById(R.id.btn_pause);
+        pause_button.setEnabled(true);
+
+        ImageButton request_button = findViewById(R.id.btn_request);
+        request_button.setEnabled(true);
 
         mediaPlayer.setDataSource(getApplicationContext(), myUri);
         mediaPlayer.prepare();
         mediaPlayer.start();
 
-        TextView song_title = findViewById(R.id.song_title);
         TextView song_artist = findViewById(R.id.song_artist);
+        TextView song_title = findViewById(R.id.song_title);
+        TextView song_url = findViewById(R.id.song_url);
         TextView tv_status = findViewById(R.id.tv_status);
 
-        song_title.setText(title);
         song_artist.setText(artist);
+        song_title.setText(title);
+        song_url.setText(url);
         tv_status.setText("Playing");
 
     }
