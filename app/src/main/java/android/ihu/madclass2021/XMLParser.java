@@ -35,8 +35,8 @@ public class XMLParser {
                         }
                     } else if (name.equals("title")){
                         response.put("title", parser.nextText());
-                    } else if (name.equals("song")){
-                        response.put("song", parser.nextText());
+                    } else if (name.equals("artist")){
+                        response.put("artist", parser.nextText());
                     } else if (name.equals("url")){
                         response.put("url", parser.nextText());
                     }

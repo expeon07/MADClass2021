@@ -33,6 +33,9 @@ public class JukeboxActivity extends AppCompatActivity {
     static final String JUKEBOX_URL= "http://mad.mywork.gr/get_song.php?t=";
     String token = MainActivity.token;
 
+    private MediaPlayer mediaPlayer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +47,8 @@ public class JukeboxActivity extends AppCompatActivity {
         super.onStart();
 
         // disable play and pause buttons
-        ImageButton play_button = findViewById(R.id.btn_play);
-        ImageButton pause_button = findViewById(R.id.btn_pause);
-        play_button.setEnabled(false);
-        pause_button.setEnabled(false);
+        deactivatePlay();
+        deactivatePause();
 
         // execute asynctask on request button click
         ImageButton request_button = findViewById(R.id.btn_request);
@@ -66,10 +67,41 @@ public class JukeboxActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+    }
+
 
     public class JukeboxTask extends AsyncTask<String, Void, InputStream> {
         @Override
         protected InputStream doInBackground(String... urls) {
+            // disable all buttons
+            deactivateRequest();
+            deactivatePause();
+            deactivatePlay();
 
             InputStream inputStream = null;
 
@@ -109,13 +141,7 @@ public class JukeboxActivity extends AppCompatActivity {
 
             // change tv_status "Requesting a song from CTower"
             TextView tv_status = findViewById(R.id.tv_status);
-            tv_status.setText("Requesting song from CTower");
-
-            // disable all buttons
-            ImageButton request_button = findViewById(R.id.btn_request);
-            request_button.setEnabled(false);
-            Log.d("Jukebox onPostExecute", "all buttons disabled");
-
+            tv_status.setText(R.string.requesting);
 
             HashMap<String, String> response = new HashMap<>();
 
@@ -149,7 +175,6 @@ public class JukeboxActivity extends AppCompatActivity {
                     String song_artist = response.get("artist");
                     String song_url = response.get("url");
 
-
                     // call SongPlayer
                     try {
                         SongPlayer(song_title, song_artist, song_url);
@@ -174,16 +199,18 @@ public class JukeboxActivity extends AppCompatActivity {
                         .build()
         );
 
-        // TODO enable btn_pause
+        ImageButton play_button = findViewById(R.id.btn_play);
         ImageButton pause_button = findViewById(R.id.btn_pause);
-        pause_button.setEnabled(true);
-
         ImageButton request_button = findViewById(R.id.btn_request);
-        request_button.setEnabled(true);
 
         mediaPlayer.setDataSource(getApplicationContext(), myUri);
         mediaPlayer.prepare();
         mediaPlayer.start();
+
+        // enable btn_pause
+        deactivatePlay();
+        activatePause();
+        activateRequest();
 
         TextView song_artist = findViewById(R.id.song_artist);
         TextView song_title = findViewById(R.id.song_title);
@@ -193,7 +220,77 @@ public class JukeboxActivity extends AppCompatActivity {
         song_artist.setText(artist);
         song_title.setText(title);
         song_url.setText(url);
-        tv_status.setText("Playing");
+        tv_status.setText(R.string.playing);
 
+        // click pause
+        pause_button.setOnClickListener(v -> {
+            mediaPlayer.pause();
+            deactivatePause();
+            activatePlay();
+            tv_status.setText(R.string.stopped);
+        });
+
+        // click play
+        play_button.setOnClickListener(v -> {
+            mediaPlayer.start();
+            deactivatePlay();
+            activatePause();
+            tv_status.setText(R.string.playing);
+        });
+
+        // execute asynctask on request button click
+        request_button.setOnClickListener(v -> {
+            mediaPlayer.stop();
+            tv_status.setText(R.string.requesting);
+
+            String request_song_url = JUKEBOX_URL + token;
+            JukeboxActivity.JukeboxTask requestSongTask = new JukeboxActivity.JukeboxTask();
+
+            try {
+                Log.d("Jukebox onStart", "button click");
+                requestSongTask.execute(request_song_url);
+
+            } catch (Exception e) {
+                Log.d("Jukebox onStart error", "error on button");
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    private void activatePlay() {
+        ImageButton play_button = findViewById(R.id.btn_play);
+        play_button.setEnabled(true);
+        play_button.setImageResource(R.drawable.play_button);
+    }
+
+    private void deactivatePlay() {
+        ImageButton play_button = findViewById(R.id.btn_play);
+        play_button.setEnabled(false);
+        play_button.setImageResource(R.drawable.play_grey);
+    }
+
+    private void activatePause() {
+        ImageButton pause_button = findViewById(R.id.btn_pause);
+        pause_button.setEnabled(true);
+        pause_button.setImageResource(R.drawable.pause_button);
+    }
+
+    private void deactivatePause() {
+        ImageButton pause_button = findViewById(R.id.btn_pause);
+        pause_button.setEnabled(false);
+        pause_button.setImageResource(R.drawable.pause_grey);
+    }
+
+    private void activateRequest() {
+        ImageButton request_button = findViewById(R.id.btn_request);
+        request_button.setEnabled(true);
+        request_button.setImageResource(R.drawable.streaming);
+    }
+
+    private void deactivateRequest() {
+        ImageButton request_button = findViewById(R.id.btn_request);
+        request_button.setEnabled(false);
+        request_button.setImageResource(R.drawable.streaming_grey);
     }
 }
