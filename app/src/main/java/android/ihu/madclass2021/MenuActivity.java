@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity {
+
+    public static String menu_message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,9 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        TextView menu_greeting = findViewById(R.id.menu_greeting);
+        menu_greeting.setText(menu_message);
 
         Button jukebox_button = findViewById(R.id.jukebox_btn);
         Log.d("onPostExecute", "Jukebox button");

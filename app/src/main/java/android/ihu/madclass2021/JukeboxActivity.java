@@ -2,6 +2,7 @@ package android.ihu.madclass2021;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -57,11 +58,9 @@ public class JukeboxActivity extends AppCompatActivity {
             JukeboxActivity.JukeboxTask requestSongTask = new JukeboxActivity.JukeboxTask();
 
             try {
-                Log.d("Jukebox onStart", "button click");
                 requestSongTask.execute(request_song_url);
 
             } catch (Exception e) {
-                Log.d("Jukebox onStart error", "error on button");
                 e.printStackTrace();
             }
         });
@@ -167,7 +166,9 @@ public class JukeboxActivity extends AppCompatActivity {
 
             switch (status) {
                 case "0-FAIL":
-                    // TODO transfer to LoginActivity
+                    Intent login_intent = new Intent(JukeboxActivity.this,
+                            LoginActivity.class);
+                    startActivity(login_intent);
                     break;
 
                 case "2-OK":
@@ -178,17 +179,15 @@ public class JukeboxActivity extends AppCompatActivity {
                     // call SongPlayer
                     try {
                         SongPlayer(song_title, song_artist, song_url);
-                    } catch (IOException | XmlPullParserException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
             }
-
-
         }
     }
 
 
-    public void SongPlayer(String title, String artist, String url) throws IOException, XmlPullParserException {
+    public void SongPlayer(String title, String artist, String url) throws IOException {
 
         Uri myUri = Uri.parse(url);
         MediaPlayer mediaPlayer = new MediaPlayer();

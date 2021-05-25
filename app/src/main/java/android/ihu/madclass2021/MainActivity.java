@@ -135,9 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             MenuActivity.class);
                     startActivity(menu_intent);
 
-//                  TODO carry over msg to Menu
-//                    TextView menu_greeting = findViewById(R.id.menu_greeting);
-//                    menu_greeting.setText(msg);
+                    MenuActivity.menu_message = msg;
 
                     Toast.makeText(getApplicationContext(),
                             "Authentication successful",
