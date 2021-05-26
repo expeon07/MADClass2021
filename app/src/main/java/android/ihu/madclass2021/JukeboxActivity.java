@@ -206,7 +206,7 @@ public class JukeboxActivity extends AppCompatActivity {
         mediaPlayer.prepare();
         mediaPlayer.start();
 
-        // enable btn_pause
+        // enable btn_pause, disable btn_play
         deactivatePlay();
         activatePause();
         activateRequest();
